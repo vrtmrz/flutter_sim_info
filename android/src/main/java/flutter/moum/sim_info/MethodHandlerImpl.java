@@ -61,9 +61,9 @@ class MethodHandlerImpl implements MethodChannel.MethodCallHandler {
         return networkOperatorName;
     }
     private String getIsoCountryCode() {
-        String simCountryIso = mTelephonyManager.getSimCountryIso();
-        if (simCountryIso == null) return "null";
-        return simCountryIso;
+        String networkCountryIso = mTelephonyManager.getNetworkCountryIso();
+        if (networkCountryIso == null) return "null";
+        return networkCountryIso;
     }
     private String getMobileCountryCode() {
         if (getMccMnc() == null || getMccMnc().length() < 5) return "null";
@@ -75,6 +75,6 @@ class MethodHandlerImpl implements MethodChannel.MethodCallHandler {
     }
 
     private String getMccMnc() {
-        return mTelephonyManager.getSimOperator();
+        return mTelephonyManager.getNetworkOperator();
     }
 }
