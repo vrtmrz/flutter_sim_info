@@ -13,9 +13,18 @@ import io.flutter.plugin.common.MethodChannel;
 class MethodHandlerImpl implements MethodChannel.MethodCallHandler {
 
     Context context;
-    private final TelephonyManager mTelephonyManager;
+    private TelephonyManager mTelephonyManager;
+    public void setContext(Context context){
+        this.context = context;
+        if(context!=null) {
+            mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        }else{
+            mTelephonyManager = null;
+        }
+
+    }
     public MethodHandlerImpl() {
-        mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+
     }
 
     @Override
@@ -52,29 +61,35 @@ class MethodHandlerImpl implements MethodChannel.MethodCallHandler {
     }
 
     private boolean isSimStateReady() {
+        if(mTelephonyManager==null) return false;
         return TelephonyManager.SIM_STATE_READY == mTelephonyManager.getSimState();
     }
 
     private String getCarrierName() {
+        if(mTelephonyManager==null) return "null";
         String networkOperatorName = mTelephonyManager.getNetworkOperatorName();
         if (networkOperatorName == null) return "null";
         return networkOperatorName;
     }
     private String getIsoCountryCode() {
+        if(mTelephonyManager==null) return "null";
         String networkCountryIso = mTelephonyManager.getNetworkCountryIso();
         if (networkCountryIso == null) return "null";
         return networkCountryIso;
     }
     private String getMobileCountryCode() {
+        if(mTelephonyManager==null) return "null";
         if (getMccMnc() == null || getMccMnc().length() < 5) return "null";
         return getMccMnc().substring(0, 3);
     }
     private String getMobileNetworkCode() {
+        if(mTelephonyManager==null) return "null";
         if (getMccMnc() == null || getMccMnc().length() < 5) return "null";
         return getMccMnc().substring(3);
     }
 
     private String getMccMnc() {
+        if(mTelephonyManager==null) return "null";
         return mTelephonyManager.getNetworkOperator();
     }
 }
